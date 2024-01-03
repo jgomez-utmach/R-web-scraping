@@ -34,30 +34,46 @@ linksAsp <- sapply(pag, dameLinksPagina)
 vlink <- as.vector(linksAsp)
 
 
-# URL de producto
 url <- "https://www.amazon.com/-/es/Bissell-CleanView-Aspiradora-liberación-rebobinado/dp/B09LPCZ9FF/ref=sr_1_32?crid=HU5HMDQLN0QT&keywords=aspiradora&qid=1704253424&sprefix=aspira%2Caps%2C357&sr=8-32"
 pagina_web <- read_html(url)
 
-# Obteniendo el nombre del producto
 nombre <- "#productTitle"
 nombre_nodo <- html_node(pagina_web, nombre)
 nombre_texto <- html_text(nombre_nodo)
 nombre_texto
 
-# Obteniendo el número de opiniones del producto
 opiniones <- "#acrPopover > span.a-declarative > a > span"
 opiniones_nodo <- html_node(pagina_web, opiniones)
 opiniones_texto <- html_text(opiniones_nodo)
 opiniones_texto
 
-# Obteniendo el precio del producto
 precio <- "#corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center > span.a-price.aok-align-center.reinventPricePriceToPayMargin.priceToPay > span.a-offscreen"
 precio_nodo <- html_node(pagina_web, precio)
 precio_texto <- html_text(precio_nodo)
 precio_texto
 
-# Obteniendo la tabla de datos del producto
 tabla <- "#productDetails_detailBullets_sections1"
 tabla_nodo <- html_node(pagina_web, tabla)
 tabla_tab <- html_table(tabla_nodo)
 tabla_tab
+
+
+# Obteniendo los datos de la primera columna de tabla_tab
+tabla_name <- tabla_tab$X1
+
+# Obteniendo los datos de la segunda columna de tabla_tab
+val <- tabla_tab$X2
+
+# Creando un data frame con los datos de < val >
+# t(): trasponer intercambia filas por columnas y viceversa
+res_tabla <- data.frame(t(val))
+
+# Cambiando el nombre de las columnas de res_tabla
+colnames(res_tabla) <- tabla_name
+
+# Ver la estructura de res_tabla
+str(res_tabla)
+
+# Creando un vector con datos específicos del producto
+# Los nombres de las columnas no deben contener caracteres especiales por eso usamos (`)
+resultado_aspiradoras <- c(nombre_texto, opiniones_texto, precio_texto, res_tabla$`Peso del producto`, res_tabla$Potencia, res_tabla$`Dimensiones del producto`, res_tabla$`País de origen`)
