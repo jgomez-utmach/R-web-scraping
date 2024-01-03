@@ -22,14 +22,8 @@ linksAsp <- sapply(pag, dameLinksPagina)
 vlink <- as.vector(linksAsp)
 
 
-# No todas la páginas tienen la misma estructura html interna
-# En este caso no todos los links tienen la tabla de datos
-# Por lo que hay que hacer una función para evaluar cada link que ingresamos
 getArticulo <- function(url){
   pagina_web <- read_html(url)
-
-  # Usamos print para saber si una url no funciona
-  print(url)
 
   nombre <- "#productTitle"
   nombre_nodo <- html_node(pagina_web, nombre)
@@ -46,19 +40,16 @@ getArticulo <- function(url){
   tabla <- "#productDetails_detailBullets_sections1"
   tabla_nodo <- html_node(pagina_web, tabla)
 
-  # Inicializamos res_tabla con un data.frame vacío
   res_tabla <- data.frame()
-  
-  # Si tabla_nodo es diferente de NA
+
   if(!is.na(tabla_nodo)){
-    # Buscamos datos de la tabla y los guardamos en res_tabla
     tabla_tab <- html_table(tabla_nodo)
     tabla_name <- tabla_tab$X1
     val <- tabla_tab$X2
     res_tabla <- data.frame(t(val))
     colnames(res_tabla) <- tabla_name
   }
-  
+
   col <- c("Peso del producto", "Potencia", "Dimensiones del producto", "País de origen")
 
   if(length(res_tabla) == 0){
@@ -88,6 +79,21 @@ getArticulo <- function(url){
     mitab <- dfzero
     colnames(mitab) <- col
   }
-  # Hicimos una corrección y usamos mitab$`...`
+
   articulo <- c(nombre_texto, calificacion_texto, precio_texto, mitab$`Peso del producto`, mitab$Potencia, mitab$`Dimensiones del producto`, mitab$`País de origen`)
 }
+
+
+# Ejecutamos la función getArticulo para cada link
+resultado_datos <- sapply(vlink, getArticulo)
+# Usamos class para saber el tipo de dato que nos devuelve
+class(resultado_datos) # Es una matriz
+# Trasponemos la matriz
+res <- t(resultado_datos)
+# Convertimos a data.frame
+mis_datos <- as.data.frame(res)
+# Ponemos nombres a las columnas y filas
+colnames(mis_datos) <- c("Nombre", "Calificacion", "Precio", "Peso", "Potencia", "Dimensiones", "Pais")
+rownames(mis_datos) <- c(1:160) # 1:160 porque son 160 links
+# Guardamos en un archivo CSV
+write.csv(mis_datos, "datos.csv")
