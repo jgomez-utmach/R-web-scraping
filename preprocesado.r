@@ -55,22 +55,29 @@ res_limpio <- cbind(aspiradoras, dimen)
 res_limpio <- res_limpio[, -7]
 
 
-# PREPROCESADO DE PRECIOS
-
-# Eliminando "US$" de los precios
 res_limpio$Precio <- gsub("US\\$", "", res_limpio$Precio)
-# Convirtiendo a numérico el campo Precio
 res_limpio$Precio <- as.numeric(res_limpio$Precio)
 
-# Como mis datos tiene productos con precios invalidos, los eliminamos
 res_limpio <- res_limpio[!is.na(res_limpio$Precio), ]
-
-# Aprobechamos y eliminamos la columna X que no nos sirve
 res_limpio <- res_limpio[, -1]
 
-# Volvemos a enumerar correctamente las filas
 n_filas <- nrow(res_limpio)
 rownames(res_limpio) <- c(1:n_filas)
 
-str(res_limpio)
+
+# PREPROCESADO DE POTENCIA
+
+# Eliminando la palabra "vatios"
+res_limpio$Potencia <- gsub(" vatios", "", res_limpio$Potencia)
+
+# Sustituyendo -1 por NA
+res_limpio$Potencia <- gsub("-1", NA, res_limpio$Potencia)
+
+# Convirtiendo a numérico
+res_limpio$Potencia <- as.numeric(res_limpio$Potencia)
+
+# Sustituyendo los NA por la media
+res_limpio$Potencia[is.na(res_limpio$Potencia)] <- mean(res_limpio$Potencia, na.rm = TRUE)
+
 View(res_limpio)
+str(res_limpio$Potencia)
