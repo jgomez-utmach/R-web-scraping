@@ -9,19 +9,16 @@ for (i in 2:15) wss[i] <- sum(kmeans(data, centers = i)$withinss)
 plot(1:15, wss, type = "b", xlab = "Número de clusters", ylab = "Suma de cuadrados dentro de los clusters")
 
 
-# CREANDO CLUSTERS CON K-MEANS
-
-# Creo 11 clusters con kmeans
 mycluster <- kmeans(data, 11, nstart = 5, iter.max = 30)
 
-#Importo librería para graficas de radar
 library(fmsb)
 
-# Indico que quiero ordenar las graficas en un grid de 4 filas y 3 columnas
 par(mfrow=c(4,3))
 
 # Graficando los clusters en una grafica de radar
 dat <- as.data.frame(t(mycluster$centers[1, ]))
+# Colocamos una fila de 5 y una de -1.5 por que radatchart() requiere de
+# un valor máximo, mínimo y el medio que será el valor de los clusters
 dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
 radarchart(dat)
 
