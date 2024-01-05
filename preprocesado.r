@@ -73,9 +73,18 @@ res_limpio$Potencia <- as.numeric(res_limpio$Potencia)
 res_limpio$Potencia[is.na(res_limpio$Potencia)] <- mean(res_limpio$Potencia, na.rm = TRUE)
 
 
-# PREPROCESADO DE CALIFICACIONES
-
-# Sustituyendo NA por la media
 res_limpio$Calificacion[is.na(res_limpio$Calificacion)] <- mean(res_limpio$Calificacion, na.rm = TRUE)
 
+
+# FORMATEO DE DATOS
+
+# Lista de campos a formatear
+campos <- c("Alto", "Ancho", "Largo", "Potencia", "Peso", "Precio", "Calificacion")
+
+# Formatear a datos flotantes de 4 decimales
+# lapply aplica una función a cada elemento de un vector o df
+# formatC convierte en datos flotentes de 4 decimales los valores del vector X
+res_limpio[campos] <- lapply(res_limpio[campos], function(x) formatC(x, format = "f", digits = 4))
+
+# Verificar el resultado
 View(res_limpio)
