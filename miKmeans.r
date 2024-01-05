@@ -1,29 +1,66 @@
 data <- res_limpio
 
-# Eliminamos las columnas que no nos interesan
 quitar_col <- c(1, 6)
 data <- data[, - quitar_col]
 
-# Nota: Anteriormente dimos a los datos un formatode 4 decimales, OMITELO!!
-
-# Ajustar lo datos a la misma escala (estandarización)
-# scale(): Resta la media a cada valor y divide por la desviación típica
 data <- scale(data)
-
-
-# Calculando la suma de los cuadrados de la distancia euclídea entre
-# cada punto observación y el centroide del cluster mas cercano
-
-# REALIZANDO CALCULO PARA 1 CLUSTER
-# Sumando la varianza de cada columna de datos y
-# multiplicandolo por el número de filas menos 1
 wss <- (nrow(data) - 1) * sum(apply(data, 2, var))
-
-# REALIZANDO CALCULO PARA 2 a 15 CLUSTERS
-# Obteniendo la suma de los cuadrados para cada número de clusters
 for (i in 2:15) wss[i] <- sum(kmeans(data, centers = i)$withinss)
-
-# Graficando para encontrar el número óptimo de clusters (codo)
 plot(1:15, wss, type = "b", xlab = "Número de clusters", ylab = "Suma de cuadrados dentro de los clusters")
 
-# Mi numero optimo de clusters es 11
+
+# CREANDO CLUSTERS CON K-MEANS
+
+# Creo 11 clusters con kmeans
+mycluster <- kmeans(data, 11, nstart = 5, iter.max = 30)
+
+#Importo librería para graficas de radar
+library(fmsb)
+
+# Indico que quiero ordenar las graficas en un grid de 4 filas y 3 columnas
+par(mfrow=c(4,3))
+
+# Graficando los clusters en una grafica de radar
+dat <- as.data.frame(t(mycluster$centers[1, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[2, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[3, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[4, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[5, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[6, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[7, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[8, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[9, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[10, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
+
+dat <- as.data.frame(t(mycluster$centers[11, ]))
+dat <- rbind(rep(5, 7), rep(-1.5, 7), dat)
+radarchart(dat)
