@@ -65,19 +65,17 @@ n_filas <- nrow(res_limpio)
 rownames(res_limpio) <- c(1:n_filas)
 
 
-# PREPROCESADO DE POTENCIA
-
-# Eliminando la palabra "vatios"
 res_limpio$Potencia <- gsub(" vatios", "", res_limpio$Potencia)
-
-# Sustituyendo -1 por NA
 res_limpio$Potencia <- gsub("-1", NA, res_limpio$Potencia)
 
-# Convirtiendo a numérico
 res_limpio$Potencia <- as.numeric(res_limpio$Potencia)
 
-# Sustituyendo los NA por la media
 res_limpio$Potencia[is.na(res_limpio$Potencia)] <- mean(res_limpio$Potencia, na.rm = TRUE)
 
+
+# PREPROCESADO DE CALIFICACIONES
+
+# Sustituyendo NA por la media
+res_limpio$Calificacion[is.na(res_limpio$Calificacion)] <- mean(res_limpio$Calificacion, na.rm = TRUE)
+
 View(res_limpio)
-str(res_limpio$Potencia)
