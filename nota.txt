@@ -1,0 +1,4 @@
+-> Copiamos el diseño Shiny de:
+   https://shiny.posit.co/r/gallery/start-simple/kmeans-example/
+
+-> Para que funcione asegurate que server.r y ui.r estén en el mismo directorio
