@@ -1,8 +1,13 @@
 function(input, output, session) {
+  # Creamos variable data que lee el archivo de datos
+  data <- read.csv("C:\\Users\\Utente\\proyectos\\R-web-scraping\\data-limpia.csv")
+  # Eliminamos la primera columna X por que solo es un indice
+  # solo en caso de existir
+  # data <- data[, -1]
 
-  # Combine the selected variables into a new data frame
   selectedData <- reactive({
-    iris[, c(input$xcol, input$ycol)]
+    # Cambio los datos de iris por los datos de aspiradoras (data)
+    data[, c(input$xcol, input$ycol)]
   })
 
   clusters <- reactive({
